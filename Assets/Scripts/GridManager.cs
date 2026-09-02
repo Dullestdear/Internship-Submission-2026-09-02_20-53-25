@@ -23,22 +23,21 @@ public class GridManager : MonoBehaviour
     {
         for(int x =0 ; x < width ; x++)
         {
-            for(int z =0 ; x < height ; z++)
+            for(int z =0 ; z < height ; z++)
             {
                 // Spawning the tiles
-                var SpawnedTile = Instantiate(tile , new Vector3(x,z), Quaternion.identity);
+                var SpawnedTile = Instantiate(tile , new Vector3(x,0,z), Quaternion.identity);
 
                 // Naming the Tiles
                 SpawnedTile.name = $"Tile {x} {z}";
+
+                // Creating the checkerboard pattern for the tiles
+                var offset = (x%2 == 0 && z%2 != 0) || (x%2 != 0 && z%2 == 0); 
+                SpawnedTile.Init(offset);
             }
         }
     }
 
     
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

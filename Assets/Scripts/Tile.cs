@@ -1,16 +1,32 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // variables for colours of the grid and the highlight
+    [SerializeField] private Color basecolor;
+    [SerializeField] private Color offsetcolor;
+
+    [SerializeField] private GameObject highlight;
+
+    [SerializeField] private Renderer meshrenderer;
+
+    // Changing the colour of materials for the grid prefab
+    public void Init(bool offset)
     {
-        
+        meshrenderer.material.color = offset ? offsetcolor : basecolor; 
     }
 
-    // Update is called once per frame
-    void Update()
+    //functions to detect mouse input to highlight a grid tile
+    void OnMouseEnter()
     {
-        
+        highlight.SetActive(true);
     }
+
+    void OnMouseExit()
+    {
+        highlight.SetActive(false); 
+    }
+
+
 }
