@@ -6,6 +6,10 @@ using TMPro; // For Coordinates text
 
 public class GridManager : MonoBehaviour
 {
+    //Variables for Spawning the obstacles 
+    [SerializeField] private GameObject obstacle;
+    [SerializeField] private ObstacleData PlacedObstacle;
+
     // Variables deciding the dimension for the grid.
     [SerializeField] private int width;
     [SerializeField] private int height;
@@ -22,6 +26,7 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         GenerateGrid(); // Calling the function to spawn grid
+        SpawnObstacles(); // Calling the function to spawn obsctacles
     }
 
     //Function to spawn/generate the grid using x and z axis
@@ -96,6 +101,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    
+    void SpawnObstacles()
+    {
+        foreach(Vector2Int coordinate in PlacedObstacle)
+        {
+            if (tiles.TryGetValue(coordinate, out  Tile  tile))
+            {
+                //spawning on top of the tile not inside so using y = 0.5
+                Vector3 spawnPosition = tile.transform.position + new Vector3(0,0.5f,0);
+                Instantiate(obstacle , spawnPosition , Quaternion.identity);
+            }
+        }
+    }
 
 }
