@@ -40,8 +40,8 @@ public class Pathfinding
             //Best Tile
             Tile currentNode = lowestFcost(openList);
 
-            // Goal reached
-            if (currentNode = endNode)
+            // if Goal reached
+            if (currentNode == endNode)
             {
                 return CalculatePath(endNode);
             }
