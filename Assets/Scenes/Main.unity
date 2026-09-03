@@ -239,12 +239,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 279727839}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.46193978, y: -0.19134173, z: 0.3314136, w: 0.8001032}
-  m_LocalPosition: {x: 0.6, y: 14, z: 33}
+  m_LocalRotation: {x: 0.7071068, y: -0.000000059604638, z: 0.00000001117587, w: 0.70710677}
+  m_LocalPosition: {x: 19.282303, y: 4.524353, z: 18.333775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 330585546}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
@@ -336,8 +336,7 @@ Transform:
   m_LocalPosition: {x: -6.3, y: 8.9, z: -6.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 279727842}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!114 &330585547
@@ -835,6 +834,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   player: {fileID: 954961778}
+  intensityPerTile: 25
+  boardLight: {fileID: 279727841}
   camZoom: 0.4
   offset: 5
   enemy: {fileID: 506303387}
@@ -1373,6 +1374,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 330585546}
+  - {fileID: 279727842}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 471296637389213554}

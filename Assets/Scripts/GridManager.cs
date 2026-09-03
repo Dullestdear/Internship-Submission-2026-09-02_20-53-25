@@ -10,6 +10,11 @@ public class GridManager : MonoBehaviour
     // Player
     [SerializeField] private PlayerMovement player;
 
+    //Lighting
+    [SerializeField] private float intensityPerTile = 25f;
+    [SerializeField] private Light boardLight;
+
+
     //Camera 
     [SerializeField] private float camZoom = 0.4f;
     [SerializeField] private float offset = 0.4f; 
@@ -44,6 +49,7 @@ public class GridManager : MonoBehaviour
         GenerateGrid(); // Calling the func to spawn grid
         SpawnObstacles(); // Calling the func to spawn obsctacles
         CameraAdjust(); // Calling the func to adjust camera location based on grid  
+        lightAdjust(); //Calling the func to adjust light intensity
     }
 
     //Function to spawn/generate the grid using x and z axis
@@ -191,6 +197,22 @@ public class GridManager : MonoBehaviour
         Camera.main.orthographicSize = maxSize*camZoom;
         
 
+    }
+
+    private void lightAdjust()
+    {
+        // Finding the centre of the Grid
+        float CentreX = (float)dataObstacle.gridWidth/2f-0.5f;
+        float CentreZ = (float)dataObstacle.gridHeight/2f-0.5f;
+
+        // Isometric View 
+        boardLight.transform.position= new Vector3(CentreX , 20f , CentreZ);
+
+        float maxSize = Mathf.Max(dataObstacle.gridWidth, dataObstacle.gridHeight);
+
+        //Camera Pos.
+        boardLight.intensity = maxSize * intensityPerTile;
+        
     }
 
 }
