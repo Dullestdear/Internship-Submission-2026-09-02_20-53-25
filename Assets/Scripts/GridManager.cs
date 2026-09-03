@@ -178,9 +178,12 @@ public class GridManager : MonoBehaviour
 
         //Camera Pos.
         float maxSize = Mathf.Max(dataObstacle.gridWidth,dataObstacle.gridHeight);
-        Vector3 campos = new Vector3(CentreX, maxSize*1.2f, CentreZ-(maxSize*0.8f));
+        float zoom = maxSize *1.0f;
+        Vector3 campos = new Vector3(CentreX, zoom, CentreZ-zoom);
         Camera.main.transform.position = campos;
-        Camera.main.transform.LookAt(new Vector3(CentreX,0,CentreZ));
+
+        // Isometric View 
+        Camera.main.transform.rotation= Quaternion.Euler(45f,0f,0f);
 
     }
 

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3716a3ceb63c3f409f0d350862f8169, type: 3}
   m_Name: ObstacleData
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleData
-  gridHeight: 20
-  gridWidth: 20
+  gridHeight: 15
+  gridWidth: 15
   Obstacle:
   - {x: 6, y: 6}
   - {x: 1, y: 8}
