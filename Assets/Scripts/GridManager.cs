@@ -169,4 +169,18 @@ public class GridManager : MonoBehaviour
         enemy.RunTurn();
     }
 
+    private void CameraAdjust()
+    {
+        // Finding the centre of the Grid
+        float CentreX = (float)dataObstacle.gridWidth/2f-0.5f;
+        float CentreZ = (float)dataObstacle.gridHeight/2f-0.5f;
+
+        //Camera Pos.
+        float maxSize = Mathf.Max(dataObstacle.gridWidth,dataObstacle.gridHeight);
+        Vector3 campos = new Vector3(CentreX, maxSize*1.2f, CentreZ-(maxSize*0.8f));
+        Camera.main.transform.position = campos;
+        Camera.main.transform.LookAt(new Vector3(CentreX,0,CentreZ));
+
+    }
+
 }
