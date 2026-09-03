@@ -15,6 +15,37 @@ public class EnemyAI : MonoBehaviour, AIInterface
     public int currentX;
     public int currentZ;
 
+    //Enemy Movement
+    private IEnumerator Start()
+    {
+        yield return null; // used here for waiting a single frame
+
+        //Spawning of the enemy (using coords)
+        Vector2Int StartingPosition = new Vector2Int(currentX , currentZ);
+        Tile startTile = grid.GetTileAtPosition(StartingPosition);
+
+        transform.position = startTile.transform.position + new Vector3(0, 0.1f, 0);
+    }
+
+    void Update()
+    {
+        //Code for making the enemy look at the player
+        Vector3 directionToPlayer =(player.transform.position-transform.position).normalized;
+        
+        //locking the Y axis to prevent any form of tilts and movement based errors
+
+        directionToPlayer.y =0;
+
+        if(directionToPlayer!= Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation= Quaternion.Slerp(transform.rotation,targetRotation
+            ,5f*Time.deltaTime);
+        } 
+    }
+
+
+
     //Inherited from AI Interface 
     public void RunTurn()
     {
@@ -60,8 +91,6 @@ public class EnemyAI : MonoBehaviour, AIInterface
     {
         isMoving = true; // did this to make sure that the enemy is currently moving
 
-        
-
         // Code to go through each tile one by one
         foreach (Tile targetTile in path)
         {
@@ -78,8 +107,9 @@ public class EnemyAI : MonoBehaviour, AIInterface
             // Exact Position in integers
             transform.position = targetPosition;
 
-            
-
+            //new tile coords
+            currentX = targetTile.gridX;
+            currentZ = targetTile.gridZ;
         }
         isMoving = false;
     }

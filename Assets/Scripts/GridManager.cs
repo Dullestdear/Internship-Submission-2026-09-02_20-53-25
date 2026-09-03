@@ -2,12 +2,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem; // For Mouse Input
 using System.Collections.Generic;
+using System.Collections;
 using TMPro; // For Coordinates text
 
 public class GridManager : MonoBehaviour
 {
     // Player
     [SerializeField] private PlayerMovement player;
+
+    // Enemy
+    [SerializeField] private EnemyAI enemy;
 
     //Variables for Spawning the obstacles 
     [SerializeField] private GameObject obstacle;
@@ -99,7 +103,7 @@ public class GridManager : MonoBehaviour
                 // MOOOOVE IT
                 if (path != null)
                 {
-                    player.MoveAlongPath(path);
+                    StartCoroutine(TurnSystem(path));
                 }
             }
         }
@@ -148,6 +152,21 @@ public class GridManager : MonoBehaviour
                 
             }
         }
+    }
+
+    private IEnumerator TurnSystem(List<Tile> path)
+    {
+        //Players turn to move 
+        player.MoveAlongPath(path);
+
+        //pause while moving
+        while (player.isMoving)
+        {
+            yield return null;
+        }
+
+        //Enemy turn to move
+        enemy.RunTurn();
     }
 
 }

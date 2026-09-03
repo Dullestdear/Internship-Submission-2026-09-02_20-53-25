@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -36,6 +37,17 @@ public class PlayerMovement : MonoBehaviour
 
             while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
             {
+                //Rotation based on where the player the going
+                Vector3 MovingDirect = (targetPosition - transform.position).normalized;
+                if (MovingDirect!= Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(MovingDirect);
+                    transform.rotation= Quaternion.Slerp(transform.rotation,targetRotation
+                    ,10f*Time.deltaTime);
+                }
+
+
+
                 transform.position = Vector3.MoveTowards(transform.position , targetPosition 
                 , speed*Time.deltaTime);
                 yield return null;
