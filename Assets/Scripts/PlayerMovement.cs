@@ -49,6 +49,10 @@ public class PlayerMovement : MonoBehaviour
 
                 //Rotation based on where the player the going
                 Vector3 MovingDirect = (targetPosition - transform.position).normalized;
+
+                // No SLANT BUG
+                MovingDirect.y = 0f;
+                
                 if (MovingDirect!= Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(MovingDirect);
