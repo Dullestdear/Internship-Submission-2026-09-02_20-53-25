@@ -14,8 +14,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private ObstacleData dataObstacle;
 
     // Variables deciding the dimension for the grid.
-    [SerializeField] private int width;
-    [SerializeField] private int height;
+    private int width;
+    private int height;
 
     //Reference to the Coordinates UI
     [SerializeField] private TextMeshProUGUI coordinatesText;
@@ -28,6 +28,11 @@ public class GridManager : MonoBehaviour
 
     void Start()
     {
+        if (dataObstacle != null)
+        {
+            width = dataObstacle.gridWidth;
+            height = dataObstacle.gridHeight;
+        }
         GenerateGrid(); // Calling the function to spawn grid
         SpawnObstacles(); // Calling the function to spawn obsctacles
     }
