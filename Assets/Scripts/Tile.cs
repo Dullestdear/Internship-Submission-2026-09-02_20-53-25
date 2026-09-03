@@ -9,8 +9,6 @@ using UnityEngine;
 
 
 
-
-
 public class Tile : MonoBehaviour
 {
     // Variables for pathfinding
@@ -26,6 +24,10 @@ public class Tile : MonoBehaviour
     // used for remembering previous tiles
     public Tile previousTile;
 
+
+    // For Cost calulcation in H Cost
+    public int gridX;
+    public int gridZ;
 
 
     // variables for colours of the grid and the highlight

@@ -44,6 +44,10 @@ public class GridManager : MonoBehaviour
                 // Naming the Tiles
                 SpawnedTile.name = $"x:{x},z:{z}";
 
+                // For Pathfinding grid
+                SpawnedTile.gridX = x;
+                SpawnedTile.gridZ = z;
+
                 // Creating the checkerboard pattern for the tiles
                 var offset = (x%2 == 0 && z%2 != 0) || (x%2 != 0 && z%2 == 0); 
                 SpawnedTile.Init(offset);
@@ -113,6 +117,8 @@ public class GridManager : MonoBehaviour
 
                 // Marking the tile as an obstacle
                 tile.isWalkable = false;
+
+                
             }
         }
     }
