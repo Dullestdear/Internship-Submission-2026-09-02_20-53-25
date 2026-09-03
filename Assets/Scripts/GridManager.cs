@@ -67,34 +67,6 @@ public class GridManager : MonoBehaviour
 
     private Tile lastHoveredTile;
 
-    void Update()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());        
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Tile hoveredTile = hit.collider.GetComponent<Tile>();
-            
-            if (hoveredTile != null)
-            {
-                // triggered if the cursor moved to a new tile
-                if (lastHoveredTile != hoveredTile)
-                {
-                    if (lastHoveredTile != null) lastHoveredTile.ToggleHighlight(false);
-                    
-                    hoveredTile.ToggleHighlight(true);
-                    lastHoveredTile = hoveredTile;
-
-                    // UI Element
-                    coordinatesText.text = $"{hoveredTile.name}";
-                }
-            }
-        }
-        else if (lastHoveredTile != null)
-        {
-            // Turning off the highlight if mouse moves off the grid entirely
-            lastHoveredTile.ToggleHighlight(false);
-            lastHoveredTile = null;
-        }
-    }
+    
 
 }
