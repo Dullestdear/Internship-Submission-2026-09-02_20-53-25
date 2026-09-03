@@ -103,7 +103,7 @@ public class GridManager : MonoBehaviour
 
     void SpawnObstacles()
     {
-        foreach(Vector2Int coordinate in PlacedObstacle)
+        foreach(Vector2Int coordinate in PlacedObstacle.Obstacle)
         {
             if (tiles.TryGetValue(coordinate, out  Tile  tile))
             {
