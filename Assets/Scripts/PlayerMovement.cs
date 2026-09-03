@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
-
     // line used to stop player inputs while the character is walking
     public bool isMoving {get;private set;}
 
@@ -32,11 +30,23 @@ public class PlayerMovement : MonoBehaviour
         // Code to go through each tile one by one
         foreach (Tile targetTile in path)
         {
+
+            //Animation Start Pos
+            Vector3 startPos=transform.position;
+
             // spawning 0.1f above so that the player doesnt spawn inside the tile
             Vector3 targetPosition = targetTile.transform.position+ new Vector3(0,0.1f,0);
 
-            while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+            //Animation Var
+            float jumpTime = 0.3f;
+            float jumpHeight = 0.5f;
+            float elapsedTime = 0f;
+
+            while (elapsedTime<jumpTime)
             {
+                elapsedTime += Time.deltaTime;
+                float percentage = elapsedTime/jumpTime;
+
                 //Rotation based on where the player the going
                 Vector3 MovingDirect = (targetPosition - transform.position).normalized;
                 if (MovingDirect!= Vector3.zero)
@@ -46,10 +56,13 @@ public class PlayerMovement : MonoBehaviour
                     ,10f*Time.deltaTime);
                 }
 
+                //Hop movment code using sine
+                Vector3 latestPos= Vector3.Lerp(startPos, targetPosition,percentage);
+                latestPos.y += Mathf.Sin(percentage*Mathf.PI)*jumpHeight;
+                transform.position=latestPos;
 
 
-                transform.position = Vector3.MoveTowards(transform.position , targetPosition 
-                , speed*Time.deltaTime);
+                
                 yield return null;
             }
 
