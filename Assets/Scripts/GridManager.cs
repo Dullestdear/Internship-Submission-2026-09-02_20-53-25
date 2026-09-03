@@ -37,7 +37,7 @@ public class GridManager : MonoBehaviour
                 var SpawnedTile = Instantiate(tile , new Vector3(x,0,z), Quaternion.identity);
 
                 // Naming the Tiles
-                SpawnedTile.name = $"Tile {x} {z}";
+                SpawnedTile.name = $"x:{x},z:{z}";
 
                 // Creating the checkerboard pattern for the tiles
                 var offset = (x%2 == 0 && z%2 != 0) || (x%2 != 0 && z%2 == 0); 
