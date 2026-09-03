@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.08590241, g: 0.22649758, b: 0.4792453, a: 1}
-  m_FogMode: 3
+  m_FogColor: {r: 0.033043776, g: 0.09019039, b: 0.19245279, a: 0.64705884}
+  m_FogMode: 1
   m_FogDensity: 0.02
-  m_LinearFogStart: 0
-  m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0, g: 0.009300107, b: 0.03396219, a: 1}
+  m_LinearFogStart: 50
+  m_LinearFogEnd: 70
+  m_AmbientSkyColor: {r: 0, g: 0.0011625134, b: 0.004245274, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -177,8 +177,8 @@ Light:
   serializedVersion: 12
   m_Type: 0
   m_Color: {r: 0.7372549, g: 0.96862745, b: 0.7647059, a: 1}
-  m_Intensity: 2
-  m_Range: 10
+  m_Intensity: 500
+  m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 52.32727
   m_CookieSize2D: {x: 0.5, y: 0.5}
@@ -240,7 +240,7 @@ Transform:
   m_GameObject: {fileID: 279727839}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46193978, y: -0.19134173, z: 0.3314136, w: 0.8001032}
-  m_LocalPosition: {x: -0.07071018, y: 3.4285862, z: 15.7384815}
+  m_LocalPosition: {x: 0.6, y: 14, z: 33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -835,6 +835,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   player: {fileID: 954961778}
+  camZoom: 0.4
+  offset: 5
   enemy: {fileID: 506303387}
   obstacle: {fileID: 1235978561931669588, guid: b3c2e294439096543b927234b8e98c9c, type: 3}
   dataObstacle: {fileID: 11400000, guid: 0970fdacca7419c42ac81c51e2aabf9c, type: 2}
