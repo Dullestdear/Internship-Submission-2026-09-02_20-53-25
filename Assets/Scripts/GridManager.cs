@@ -37,8 +37,9 @@ public class GridManager : MonoBehaviour
             width = dataObstacle.gridWidth;
             height = dataObstacle.gridHeight;
         }
-        GenerateGrid(); // Calling the function to spawn grid
-        SpawnObstacles(); // Calling the function to spawn obsctacles
+        GenerateGrid(); // Calling the func to spawn grid
+        SpawnObstacles(); // Calling the func to spawn obsctacles
+        CameraAdjust(); // Calling the func to adjust camera location based on grid  
     }
 
     //Function to spawn/generate the grid using x and z axis

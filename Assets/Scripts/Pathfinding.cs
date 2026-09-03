@@ -145,24 +145,30 @@ public class Pathfinding
     {
         //List for directions
         List<Tile> neighboursList = new List<Tile>();
-        if (currentnode.gridX - 1 >= 0)
-        {
-            neighboursList.Add(GetTile(currentnode.gridX-1, currentnode.gridZ));
-        }
-        if (currentnode.gridX + 1 < 10)
-        {
-            neighboursList.Add(GetTile(currentnode.gridX+1, currentnode.gridZ));
-        }
-        if (currentnode.gridZ - 1 >= 0)
-        {
-            neighboursList.Add(GetTile(currentnode.gridX, currentnode.gridZ -1));
-        }
-        if (currentnode.gridZ + 1 < 10)
-        {
-            neighboursList.Add(GetTile(currentnode.gridX, currentnode.gridZ +1));
-        }
 
-        neighboursList.RemoveAll(item => item == null);
+        // left ,right,up,down
+        Tile left = GetTile(currentnode.gridX-1 , currentnode.gridZ);
+        Tile right = GetTile(currentnode.gridX+1 , currentnode.gridZ);
+        Tile up = GetTile(currentnode.gridX , currentnode.gridZ +1);
+        Tile down = GetTile(currentnode.gridX , currentnode.gridZ-1);
+
+        //if train to add tiles
+        if (left != null)
+        {
+            neighboursList.Add(left);
+        }
+        if (right != null)
+        {
+            neighboursList.Add(right);
+        }
+        if (up != null)
+        {
+            neighboursList.Add(up);
+        }
+        if (down != null)
+        {
+            neighboursList.Add(down);
+        }
         return neighboursList;
     }
 }
