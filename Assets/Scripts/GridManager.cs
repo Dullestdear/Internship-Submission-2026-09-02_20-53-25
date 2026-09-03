@@ -24,7 +24,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile tile;
 
     // Collecting/storing the tiles 
-    private Dictionary<Vector2Int,Tile> tiles;
+    public Dictionary<Vector2Int,Tile> tiles;
 
     void Start()
     {
