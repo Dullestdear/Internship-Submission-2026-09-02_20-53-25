@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Pathfinding
@@ -10,6 +11,75 @@ public class Pathfinding
     public Pathfinding(Dictionary<Vector2Int, Tile> existingGrid)
     {
         this.gridtiles = existingGrid;
+    }
+
+    public List<Tile> FindPath(int startX , int StartZ , int endX , int endZ)
+    {
+        // Starting tile and ending tile
+        Tile startNode = GetTile(startX,StartZ);
+        Tile endNode = GetTile(endX,endZ);
+
+        List<Tile> openList = new List<Tile> {startNode};
+        List<Tile> closedList = new List<Tile>();
+
+        //Refreshing before the calc
+        foreach(var i in gridtiles)
+        {
+            Tile pathNode = i.Value;
+            pathNode.gcost = 9999999;
+            pathNode.previousTile = null;
+        }
+
+        //First Node
+        startNode.gcost=0;
+        startNode.hcost = Distcost(startNode, endNode);
+
+        //Searching algo
+        while (openList.Count > 0)
+        {
+            //Best Tile
+            Tile currentNode = lowestFcost(openList);
+
+            // Goal reached
+            if (currentNode = endNode)
+            {
+                return CalculatePath(endNode);
+            }
+
+            // Checked nodes go to closed from open
+            openList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            // Checking all 4 directions
+            foreach (Tile neighbourNode in FindingNeighbours(currentNode))
+            {
+                // go over obstacles and alreadt visted nodes
+                if ( closedList.Contains(neighbourNode) || !neighbourNode.isWalkable)
+                {
+                    continue;
+                }
+
+                // Cost to move
+                int MoveGcost = currentNode.gcost + Distcost(currentNode, neighbourNode);
+
+                // Checking whichever is faster
+                if (MoveGcost < neighbourNode.gcost)
+                {
+                    neighbourNode.previousTile = currentNode;
+                    neighbourNode.gcost = MoveGcost;
+                    neighbourNode.hcost = Distcost(neighbourNode, endNode);
+                    
+                    // Add to open list if it is faster so that it can check again
+                    if (!openList.Contains(neighbourNode))
+                    {
+                        openList.Add(neighbourNode);
+                    }
+                }
+
+            }
+        }
+        return null;
+
     }
     
     // Getting the Tile coordinates from my Grid
