@@ -10,6 +10,10 @@ public class GridManager : MonoBehaviour
     // Player
     [SerializeField] private PlayerMovement player;
 
+    //Camera 
+    [SerializeField] private float camZoom = 0.4f;
+    [SerializeField] private float offset = 0.4f; 
+
     // Enemy
     [SerializeField] private EnemyAI enemy;
 
@@ -176,14 +180,16 @@ public class GridManager : MonoBehaviour
         float CentreX = (float)dataObstacle.gridWidth/2f-0.5f;
         float CentreZ = (float)dataObstacle.gridHeight/2f-0.5f;
 
-        //Camera Pos.
-        float maxSize = Mathf.Max(dataObstacle.gridWidth,dataObstacle.gridHeight);
-        float zoom = maxSize *1.0f;
-        Vector3 campos = new Vector3(CentreX, zoom, CentreZ-zoom);
-        Camera.main.transform.position = campos;
-
         // Isometric View 
-        Camera.main.transform.rotation= Quaternion.Euler(45f,0f,0f);
+        Camera.main.transform.rotation= Quaternion.Euler(30f,45f,0f);
+
+        //Camera Pos.
+        float dist = 20f;
+        Vector3 campos = new Vector3(CentreX-dist-offset,dist, CentreZ-dist-offset);
+        Camera.main.transform.position = campos;
+        float maxSize = Mathf.Max(dataObstacle.gridWidth,dataObstacle.gridHeight);
+        Camera.main.orthographicSize = maxSize*camZoom;
+        
 
     }
 
