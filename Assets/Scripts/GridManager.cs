@@ -8,7 +8,7 @@ public class GridManager : MonoBehaviour
 {
     //Variables for Spawning the obstacles 
     [SerializeField] private GameObject obstacle;
-    [SerializeField] private ObstacleData PlacedObstacle;
+    [SerializeField] private ObstacleData dataObstacle;
 
     // Variables deciding the dimension for the grid.
     [SerializeField] private int width;
@@ -103,13 +103,16 @@ public class GridManager : MonoBehaviour
 
     void SpawnObstacles()
     {
-        foreach(Vector2Int coordinate in PlacedObstacle.Obstacle)
+        foreach(Vector2Int coordinate in dataObstacle.Obstacle)
         {
             if (tiles.TryGetValue(coordinate, out  Tile  tile))
             {
-                //spawning on top of the tile not inside so using y = 0.5
-                Vector3 spawnPosition = tile.transform.position + new Vector3(0,0.5f,0);
+                //spawning on top of the tile not inside so using y = 0.1
+                Vector3 spawnPosition = tile.transform.position + new Vector3(0,0.1f,0);
                 Instantiate(obstacle , spawnPosition , Quaternion.identity);
+
+                // Marking the tile as an obstacle
+                tile.isWalkable = false;
             }
         }
     }
