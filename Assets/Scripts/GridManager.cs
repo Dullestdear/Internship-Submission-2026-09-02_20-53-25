@@ -6,6 +6,9 @@ using TMPro; // For Coordinates text
 
 public class GridManager : MonoBehaviour
 {
+    // Player
+    [SerializeField] private PlayerMovement player;
+
     //Variables for Spawning the obstacles 
     [SerializeField] private GameObject obstacle;
     [SerializeField] private ObstacleData dataObstacle;
@@ -72,12 +75,31 @@ public class GridManager : MonoBehaviour
     }
 
 
-    //Raycast based mouse input detectection for tile highlighting 
+     
 
     private Tile lastSelectedTile;
 
     void Update()
     {
+
+        // Click and then the player moves to that tile input code
+        if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null)
+        {
+            if(player != null && !player.isMoving)
+            {
+                Pathfinding pathfinder = new Pathfinding(tiles);
+                List<Tile> path = pathfinder.FindPath(player.currentX,player.currentZ
+                ,lastSelectedTile.gridX,lastSelectedTile.gridZ);
+
+                // MOOOOVE IT
+                if (path != null)
+                {
+                    player.MoveAlongPath(path);
+                }
+            }
+        }
+
+        //Raycast based mouse input detectection for tile highlighting
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray,out RaycastHit hit))
         {
