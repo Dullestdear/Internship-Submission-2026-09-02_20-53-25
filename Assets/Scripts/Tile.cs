@@ -18,14 +18,9 @@ public class Tile : MonoBehaviour
     }
 
     //functions to detect mouse input to highlight a grid tile
-    void OnMouseEnter()
+    public void ToggleHighlight(bool toggle)
     {
-        highlight.SetActive(true);
-    }
-
-    void OnMouseExit()
-    {
-        highlight.SetActive(false); 
+        highlight.SetActive(toggle);
     }
 
 
