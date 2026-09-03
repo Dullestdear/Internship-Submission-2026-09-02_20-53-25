@@ -94,7 +94,7 @@ public class GridManager : MonoBehaviour
         // Click and then the player moves to that tile input code
         if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null)
         {
-            if(player != null && !player.isMoving)
+            if(player != null && !player.isMoving && (enemy==null || !enemy.isMoving))
             {
                 Pathfinding pathfinder = new Pathfinding(tiles);
                 List<Tile> path = pathfinder.FindPath(player.currentX,player.currentZ
