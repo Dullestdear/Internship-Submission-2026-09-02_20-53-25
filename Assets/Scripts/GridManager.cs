@@ -65,7 +65,36 @@ public class GridManager : MonoBehaviour
 
     //Raycast based mouse input detectection for tile highlighting 
 
-    private Tile lastHoveredTile;
+    private Tile lastSelectedTile;
+
+    void Update()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray,out RaycastHit hit))
+        {
+            Tile selectedTile = hit.collider.GetComponent<Tile>();
+            
+
+            if (selectedTile != null)
+            {
+                if (lastSelectedTile != null) lastSelectedTile.ToggleHighlight(false);
+                selectedTile.ToggleHighlight(true);
+                lastSelectedTile = selectedTile;
+
+                // Name of the tile (coordinates) ( for Displaying on screen)
+                coordinatesText.text = $"{selectedTile.name}";
+                
+            }
+        }
+        
+        else if (lastSelectedTile != null)
+        {   
+            // Turning the highlight off when the cursor is not on the grid
+            lastSelectedTile.ToggleHighlight(false);
+            lastSelectedTile = null;
+
+        }
+    }
 
     
 
