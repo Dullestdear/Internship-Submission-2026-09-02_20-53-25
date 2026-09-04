@@ -240,7 +240,7 @@ Transform:
   m_GameObject: {fileID: 279727839}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0.000000059604638, z: 0.00000001117587, w: 0.70710677}
-  m_LocalPosition: {x: 19.282303, y: 4.524353, z: 18.333775}
+  m_LocalPosition: {x: 4.5, y: 17.1, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -671,7 +671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee2a8dbb723b57459a3059185724454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  speed: 5
   grid: {fileID: 953068507}
   player: {fileID: 954961778}
   currentX: 6
@@ -910,10 +909,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   player: {fileID: 954961778}
-  intensityPerTile: 50
+  intensityPerTile: 10
   boardLight: {fileID: 279727841}
   camZoom: 0.4
-  offset: 5
+  offset: 4
   enemy: {fileID: 506303387}
   obstacle: {fileID: 1235978561931669588, guid: b3c2e294439096543b927234b8e98c9c, type: 3}
   dataObstacle: {fileID: 11400000, guid: 0970fdacca7419c42ac81c51e2aabf9c, type: 2}
@@ -951,7 +950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ccaab9f68ee9bb41850a2b1129ddc38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 5
   currentX: 0
   currentZ: 0
 --- !u!1 &964521517

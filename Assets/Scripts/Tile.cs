@@ -2,6 +2,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
+//This script stores the Cost and the variables of A* and the Grid Coordinates
+
+
 // For A* Pathfinding ( used here)
 // G = Cost From Starting Node 
 // H = Heuristic Cost to Reach End Node

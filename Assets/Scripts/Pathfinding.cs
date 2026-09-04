@@ -3,9 +3,11 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// This Script is used to find the shortest path to a particular coordinate using A* 
+
 public class Pathfinding
 {
-    
+    // used for storing tiles
     private Dictionary<Vector2Int , Tile> gridtiles;
 
     public Pathfinding(Dictionary<Vector2Int, Tile> existingGrid)
@@ -152,7 +154,7 @@ public class Pathfinding
         Tile up = GetTile(currentnode.gridX , currentnode.gridZ +1);
         Tile down = GetTile(currentnode.gridX , currentnode.gridZ-1);
 
-        //if train to add tiles
+        //if ladder to add tiles
         if (left != null)
         {
             neighboursList.Add(left);

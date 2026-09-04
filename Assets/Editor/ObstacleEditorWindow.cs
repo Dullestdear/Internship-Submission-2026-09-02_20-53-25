@@ -3,6 +3,10 @@ using UnityEditor;
 using Unity.VisualScripting;
 using Mono.Cecil;
 
+// This script is used to create the Utility tool that is used to change the width of the grid 
+// as well as creating the interface of the grid by communicating 
+// with the Scritable Object(Obstacle data)
+
 public class ObstacleEditorWindow : EditorWindow
 {
     private Vector2 scrollingPosition; // Variable used for Scrolling in the menu
@@ -95,6 +99,7 @@ public class ObstacleEditorWindow : EditorWindow
         EditorGUILayout.EndScrollView();
         EditorGUILayout.Space(10);
 
+        // Removing obstacles
         if (GUILayout.Button("Clear Obstacles"))
         {
             Undo.RecordObject(targetData , "Clear Obstacles");

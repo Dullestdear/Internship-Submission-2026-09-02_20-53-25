@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+// This EnemyAI Script controls the pathfinding and movement and animation of the enemy 
+// This inherits Run Turn function from the AI Interface script (AIInterface)
+
 public class EnemyAI : MonoBehaviour, AIInterface
 {
     public bool isMoving{ get; private set;}

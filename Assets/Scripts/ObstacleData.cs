@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// This is the Scritable object script that is soley used for storing the Obstacle's Data
+
 [CreateAssetMenu(fileName = "ObstacleData" , menuName = "ScriptableObjects/Obstacle")]
 public class ObstacleData : ScriptableObject
 {

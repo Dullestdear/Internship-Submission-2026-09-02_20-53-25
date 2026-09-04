@@ -5,6 +5,11 @@ using System.Collections.Generic;
 using System.Collections;
 using TMPro; // For Coordinates text
 
+// This the MAIN Script for this project . It is used for Generating the Grid , Spawning Obstacles.
+// It also handles the mouse raycast movement as well as the turn based system , camera 
+// and the lighting
+
+
 public class GridManager : MonoBehaviour
 {
     // Player
@@ -206,7 +211,8 @@ public class GridManager : MonoBehaviour
         float CentreZ = (float)dataObstacle.gridHeight/2f-0.5f;
 
         // Isometric View 
-        boardLight.transform.position= new Vector3(CentreX , 20f , CentreZ);
+        boardLight.transform.position= new Vector3(CentreX , boardLight.transform.position.y, 
+        CentreZ);
 
         float maxSize = Mathf.Max(dataObstacle.gridWidth, dataObstacle.gridHeight);
 

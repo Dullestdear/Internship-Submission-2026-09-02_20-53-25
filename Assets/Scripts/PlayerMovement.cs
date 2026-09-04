@@ -5,6 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// This script is used for making the player move along the shortest path found using A*
+// Also contains the moving animation of the player
+
 public class PlayerMovement : MonoBehaviour
 {
     // line used to stop player inputs while the character is walking
