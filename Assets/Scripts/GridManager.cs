@@ -11,7 +11,16 @@ using TMPro; // For Coordinates text
 
 
 public class GridManager : MonoBehaviour
-{
+{   
+    // dimensions for bounds-checking
+    public int Width => width;
+    public int Height => height;
+
+    // to clean up the hierarchy
+    private Transform tilesContainer;
+    private Transform obstaclesContainer;
+    private BoxCollider boardCollider;
+
     // Player
     [SerializeField] private PlayerMovement player;
 
@@ -62,12 +71,18 @@ public class GridManager : MonoBehaviour
     void GenerateGrid()
     {
         tiles= new Dictionary<Vector2Int, Tile>();
+
+        // Grouping the tiles together 
+        tilesContainer = new GameObject("Tiles Container").transform;
+        tilesContainer.SetParent(transform);
+
         for(int x =0 ; x < width ; x++)
         {
             for(int z =0 ; z < height ; z++)
             {
                 // Spawning the tiles
-                var SpawnedTile = Instantiate(tile , new Vector3(x,0,z), Quaternion.identity);
+                var SpawnedTile = Instantiate(tile , new Vector3(x,0,z), Quaternion.identity
+                ,tilesContainer);
 
                 // Naming the Tiles
                 SpawnedTile.name = $"x:{x},z:{z}";
@@ -77,14 +92,20 @@ public class GridManager : MonoBehaviour
                 SpawnedTile.gridZ = z;
 
                 // Creating the checkerboard pattern for the tiles
-                var offset = (x%2 == 0 && z%2 != 0) || (x%2 != 0 && z%2 == 0); 
+                var offset = (x%2==0&&z%2!= 0) || (x%2!=0 &&z%2==0); 
                 SpawnedTile.Init(offset);
 
                 //Storing the spawned tiles
                 tiles[new Vector2Int(x,z)] = SpawnedTile;
             }
-        }
-    }
+            
+        }   
+        // Add single Huge collider for mouse interaction
+        boardCollider = gameObject.AddComponent<BoxCollider>();
+        boardCollider.center = new Vector3((width - 1) / 2f, -0.05f, (height - 1) / 2f);
+        boardCollider.size = new Vector3(width, 0.1f, height);     
+}
+
 
     // Collecting the tile from the current position
     public Tile GetTileAtPosition(Vector2Int pos)
@@ -106,40 +127,44 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
+        // safety for no/unassigned camera
+        if (Mouse.current==null || Camera.main == null) return; 
 
         // Click and then the player moves to that tile input code
-        if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null)
-        {
-            if(player != null && !player.isMoving && (enemy==null || !enemy.isMoving))
-            {
-                Pathfinding pathfinder = new Pathfinding(tiles);
-                List<Tile> path = pathfinder.FindPath(player.currentX,player.currentZ
-                ,lastSelectedTile.gridX,lastSelectedTile.gridZ);
-
-                // MOOOOVE IT
-                if (path != null)
-                {
-                    StartCoroutine(TurnSystem(path));
-                }
-            }
-        }
-
+        
         //Raycast based mouse input detectection for tile highlighting
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray,out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == boardCollider)
         {
-            Tile selectedTile = hit.collider.GetComponent<Tile>();
-            
+            int targetX = Mathf.Clamp(Mathf.RoundToInt(hit.point.x), 0, width - 1);
+            int targetZ = Mathf.Clamp(Mathf.RoundToInt(hit.point.z), 0, height - 1);
+
+            Tile selectedTile = GetTileAtPosition(new Vector2Int(targetX, targetZ));
 
             if (selectedTile != null)
             {
-                if (lastSelectedTile != null) lastSelectedTile.ToggleHighlight(false);
+                if (lastSelectedTile != null && lastSelectedTile != selectedTile) 
+                    lastSelectedTile.ToggleHighlight(false);
+
                 selectedTile.ToggleHighlight(true);
                 lastSelectedTile = selectedTile;
 
-                // Name of the tile (coordinates) ( for Displaying on screen)
                 coordinatesText.text = $"{selectedTile.name}";
-                
+            }
+
+            // Click to execute move via TurnManager
+            if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null && lastSelectedTile.isWalkable)
+            {
+                if (TurnManager.Instance != null && TurnManager.Instance.CanPlayerAct)
+                {
+                    Pathfinding pathfinder = new Pathfinding(tiles);
+                    List<Tile> path = pathfinder.FindPath(player.currentX, player.currentZ, lastSelectedTile.gridX, lastSelectedTile.gridZ);
+
+                    if (path != null)
+                    {
+                        TurnManager.Instance.PlayerMove(path);
+                    }
+                }
             }
         }
         
@@ -154,6 +179,9 @@ public class GridManager : MonoBehaviour
 
     void SpawnObstacles()
     {
+        obstaclesContainer = new GameObject("Obstacles Container").transform;
+        obstaclesContainer.SetParent(transform);
+
         foreach(Vector2Int coordinate in dataObstacle.Obstacle)
         {
             if (tiles.TryGetValue(coordinate, out  Tile  tile))
@@ -170,20 +198,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TurnSystem(List<Tile> path)
-    {
-        //Players turn to move 
-        player.MoveAlongPath(path);
-
-        //pause while moving
-        while (player.isMoving)
-        {
-            yield return null;
-        }
-
-        //Enemy turn to move
-        enemy.RunTurn();
-    }
 
     private void CameraAdjust()
     {
@@ -197,9 +211,15 @@ public class GridManager : MonoBehaviour
         //Camera Pos.
         float dist = 20f;
         Vector3 campos = new Vector3(CentreX-dist-offset,dist, CentreZ-dist-offset);
+        
+        // aspect ratio so tall 5x11 grids fit on screen
+        float diagonal = (width + height) * 0.7071f;
+        float aspect = (float)Screen.width / Screen.height;
+        float requiredSize = (diagonal / 2f) + 2f;
+
         Camera.main.transform.position = campos;
-        float maxSize = Mathf.Max(dataObstacle.gridWidth,dataObstacle.gridHeight);
-        Camera.main.orthographicSize = maxSize*camZoom;
+        Camera.main.orthographic = true;
+        Camera.main.orthographicSize = Mathf.Max(requiredSize,requiredSize/aspect);
         
 
     }

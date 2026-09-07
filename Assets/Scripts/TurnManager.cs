@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 
-// DS for the current state within a turn .
 public enum TurnState
 {
     PlayersTurn,
@@ -18,7 +17,7 @@ public class TurnManager : MonoBehaviour
 
     //References 
     [SerializeField] private PlayerMovement player;
-    [SerializeField] private PlayerMovement enemy;
+    [SerializeField] private EnemyAI enemy;
 
     public TurnState CurrentState {get;private set;} = TurnState.PlayersTurn;
 

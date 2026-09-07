@@ -21,6 +21,12 @@ public class Pathfinding
         Tile startNode = GetTile(startX,StartZ);
         Tile endNode = GetTile(endX,endZ);
 
+        // Safety for non-square grid demensions or unwalkable places(Coords)
+        if (startNode== null||endNode== null ||!endNode.isWalkable)
+        {
+            return null;
+        }
+
         List<Tile> openList = new List<Tile> {startNode};
         List<Tile> closedList = new List<Tile>();
 

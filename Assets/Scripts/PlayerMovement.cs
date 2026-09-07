@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     // line used to stop player inputs while the character is walking
     public bool isMoving {get;private set;}
 
+    // This is used when the player when the player completes his movement
+    public System.Action OnMovementCompleted;
+
     // player character's current postition/coords
     public int currentX;
     public int currentZ;
@@ -82,6 +85,9 @@ public class PlayerMovement : MonoBehaviour
 
         }
         isMoving = false;
+
+        // run the event to notify that the player's turn is done
+        OnMovementCompleted?.Invoke();
     }
 
 

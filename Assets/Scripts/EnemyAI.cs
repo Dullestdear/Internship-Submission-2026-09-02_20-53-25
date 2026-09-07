@@ -7,6 +7,12 @@ using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour, AIInterface
 {
+
+    // Event runned when the enemy turn is completed
+    public System.Action OnTurnCompleted;
+
+    [Tooltip("Max tiles enemy can travel per turn to avoid stopping player input")]
+    [SerializeField] private int maxMoveSteps = 2;
     public bool isMoving{ get; private set;}
 
     //Player and Grid 
@@ -22,11 +28,26 @@ public class EnemyAI : MonoBehaviour, AIInterface
     {
         yield return null; // used here for waiting a single frame
 
+        //Prevention of outofbounds code
+        currentX= Mathf.Clamp(currentX,0, grid.Width- 1);
+        currentZ= Mathf.Clamp(currentZ,0, grid.Height- 1);
+
         //Spawning of the enemy (using coords)
         Vector2Int StartingPosition = new Vector2Int(currentX , currentZ);
         Tile startTile = grid.GetTileAtPosition(StartingPosition);
+        
+        // Fallback if tile is not walkable
+        if (startTile == null)
+        {
+            startTile = grid.GetTileAtPosition(Vector2Int.zero);
+            currentX =0;
+            currentZ =0;
+        }
 
-        transform.position = startTile.transform.position + new Vector3(0, 0.1f, 0);
+        if (startTile != null)
+        {
+            transform.position= startTile.transform.position + new Vector3(0, 0.1f, 0);
+        }
     }
 
     void Update()
@@ -67,9 +88,17 @@ public class EnemyAI : MonoBehaviour, AIInterface
             // MOOOOVE IT
             if (path !=null && path.Count > 0)
             {
+                // Limiting player movement distance
+                if (path.Count > maxMoveSteps)
+                {
+                    path = path.GetRange(0, maxMoveSteps);
+                }
                 StartCoroutine(Move(path));
+                return;
             }
         }
+        //END THE TURN IF there is no path
+        OnTurnCompleted?.Invoke();
     }
 
     //func to find the tiles close to the player
@@ -149,5 +178,6 @@ public class EnemyAI : MonoBehaviour, AIInterface
 
         }
         isMoving = false;
+        OnTurnCompleted?.Invoke();
     }
 }
