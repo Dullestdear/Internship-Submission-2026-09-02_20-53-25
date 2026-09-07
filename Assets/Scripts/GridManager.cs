@@ -12,9 +12,14 @@ using TMPro; // For Coordinates text
 
 public class GridManager : MonoBehaviour
 {   
+    //Base Dimensions
+    [SerializeField] private Transform boardBase;
+
     // dimensions for bounds-checking
     public int Width => width;
     public int Height => height;
+
+    [SerializeField] private float tileSurfaceY = 0.5f; // this should be the hieght of the tile prefab
 
     // to clean up the hierarchy
     private Transform tilesContainer;
@@ -64,10 +69,22 @@ public class GridManager : MonoBehaviour
         SpawnObstacles(); // Calling the func to spawn obsctacles
         CameraAdjust(); // Calling the func to adjust camera location based on grid  
         lightAdjust(); //Calling the func to adjust light intensity
+        AdjustBoardBase(); //Calling the func to Adjust back board Size
     }
 
-    //Function to spawn/generate the grid using x and z axis
+    //Function to adjust wooden board size
+    private void AdjustBoardBase()
+    {
+        if (boardBase == null) return;
 
+        float centerX = (width - 1) / 2f;
+        float centerZ = (height - 1) / 2f;
+
+        // Center under the grid and add a 0.4 border padding
+        boardBase.position = new Vector3(centerX, -0.5f, centerZ);
+        boardBase.localScale = new Vector3(width + 0.4f, 1f, height + 0.4f);
+    }
+    //Function to spawn/generate the grid using x and z axis
     void GenerateGrid()
     {
         tiles= new Dictionary<Vector2Int, Tile>();
@@ -100,10 +117,7 @@ public class GridManager : MonoBehaviour
             }
             
         }   
-        // Add single Huge collider for mouse interaction
-        boardCollider = gameObject.AddComponent<BoxCollider>();
-        boardCollider.center = new Vector3((width - 1) / 2f, -0.05f, (height - 1) / 2f);
-        boardCollider.size = new Vector3(width, 0.1f, height);     
+            
 }
 
 
@@ -133,38 +147,54 @@ public class GridManager : MonoBehaviour
         // Click and then the player moves to that tile input code
         
         //Raycast based mouse input detectection for tile highlighting
+        Plane groundPlane = new Plane(Vector3.up, new Vector3(0f, tileSurfaceY, 0f));
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == boardCollider)
+
+        if (groundPlane.Raycast(ray, out float enter))
         {
-            int targetX = Mathf.Clamp(Mathf.RoundToInt(hit.point.x), 0, width - 1);
-            int targetZ = Mathf.Clamp(Mathf.RoundToInt(hit.point.z), 0, height - 1);
+            Vector3 hitPoint = ray.GetPoint(enter);
 
-            Tile selectedTile = GetTileAtPosition(new Vector2Int(targetX, targetZ));
+            // FloorToInt(pos + 0.5f) means uniform centered tile :[-0.5,0.5) to0
+            int targetX = Mathf.FloorToInt(hitPoint.x + 0.5f);
+            int targetZ = Mathf.FloorToInt(hitPoint.z + 0.5f);
 
-            if (selectedTile != null)
+            // to confirm coordinates are within valid grid bounds
+            if (targetX >= 0 && targetX < width && targetZ >= 0 && targetZ < height)
             {
-                if (lastSelectedTile != null && lastSelectedTile != selectedTile) 
-                    lastSelectedTile.ToggleHighlight(false);
+                Tile selectedTile = GetTileAtPosition(new Vector2Int(targetX, targetZ));
 
-                selectedTile.ToggleHighlight(true);
-                lastSelectedTile = selectedTile;
-
-                coordinatesText.text = $"{selectedTile.name}";
-            }
-
-            // Click to execute move via TurnManager
-            if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null && lastSelectedTile.isWalkable)
-            {
-                if (TurnManager.Instance != null && TurnManager.Instance.CanPlayerAct)
+                if (selectedTile != null)
                 {
-                    Pathfinding pathfinder = new Pathfinding(tiles);
-                    List<Tile> path = pathfinder.FindPath(player.currentX, player.currentZ, lastSelectedTile.gridX, lastSelectedTile.gridZ);
-
-                    if (path != null)
+                    if (lastSelectedTile != null && lastSelectedTile != selectedTile)
                     {
-                        TurnManager.Instance.PlayerMove(path);
+                        lastSelectedTile.ToggleHighlight(false);
+                    }
+
+                    selectedTile.ToggleHighlight(true);
+                    lastSelectedTile = selectedTile;
+
+                    coordinatesText.text =$"X: {selectedTile.gridX}  |  Z: {selectedTile.gridZ}";
+                }
+
+                // Click to execute move via TurnManager
+                if (Mouse.current.leftButton.wasPressedThisFrame && lastSelectedTile != null && lastSelectedTile.isWalkable)
+                {
+                    if (TurnManager.Instance != null && TurnManager.Instance.CanPlayerAct)
+                    {
+                        Pathfinding pathfinder = new Pathfinding(tiles);
+                        List<Tile> path = pathfinder.FindPath(player.currentX, player.currentZ, lastSelectedTile.gridX, lastSelectedTile.gridZ);
+
+                        if (path != null)
+                        {
+                            TurnManager.Instance.PlayerMove(path);
+                        }
                     }
                 }
+            }
+            else if (lastSelectedTile != null)
+            {
+                lastSelectedTile.ToggleHighlight(false);
+                lastSelectedTile = null;
             }
         }
         
@@ -188,7 +218,8 @@ public class GridManager : MonoBehaviour
             {
                 //spawning on top of the tile not inside so using y = 0.1
                 Vector3 spawnPosition = tile.transform.position + new Vector3(0,0.1f,0);
-                Instantiate(obstacle , spawnPosition , Quaternion.identity);
+                Instantiate(obstacle , spawnPosition , Quaternion.identity
+                , obstaclesContainer);
 
                 // Marking the tile as an obstacle
                 tile.isWalkable = false;
@@ -215,7 +246,7 @@ public class GridManager : MonoBehaviour
         // aspect ratio so tall 5x11 grids fit on screen
         float diagonal = (width + height) * 0.7071f;
         float aspect = (float)Screen.width / Screen.height;
-        float requiredSize = (diagonal / 2f) + 2f;
+        float requiredSize = (diagonal / 2f) + 1f;
 
         Camera.main.transform.position = campos;
         Camera.main.orthographic = true;
